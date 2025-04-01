@@ -1,4 +1,7 @@
-const HomePage = () => {
+import React, { useState } from "react";
+
+function HomePage() {
+
   const topics = [
     "Анализ информационных моделей",
     "Построение таблиц истинности логических выражений",
@@ -22,74 +25,9 @@ const HomePage = () => {
     "Выигрышная стратегия. Задание 2",
   ];
 
-  return (
-    <div
-      style={{ backgroundColor: "#D9D9D9", height: "100vh", padding: "50px" }}
-    >
-      <div
-        style={{
-          backgroundColor: "white",
-          width: "90%",
-          height: "100px",
-          borderRadius: "25px",
-          margin: "auto",
-        }}
-      ></div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: "20px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            backgroundColor: "white",
-            padding: "50px",
-            borderRadius: "25px",
-            width: "100%",
-            marginTop: "25px",
-          }}
-        ></div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            backgroundColor: "white",
-            padding: "50px",
-            borderRadius: "25px",
-            width: "30%",
-            marginTop: "25px",
-          }}
-        >
-          {topics.map((el) => (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <input
-                type="number"
-                value="0"
-                style={{
-                  width: "30px",
-                  marginRight: "20px",
-                  textAlign: "center",
-                }}
-              />
-              <h2
-                name=""
-                id=""
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                {el}
-              </h2>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+
+  return ( <></>
   );
-};
+}
 
 export default HomePage;
