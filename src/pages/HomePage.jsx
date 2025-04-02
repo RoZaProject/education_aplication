@@ -106,6 +106,33 @@ function HomePage() {
                   <h3 className="font-semibold text-lg">Темы</h3>
                   <span className="text-sm text-gray-600">Всего задач: {totalTasks}</span>
                 </div>
+                <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+                  {topics.map((topic, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center justify-between p-2 hover:bg-gray-50 rounded"
+                    >
+                      <span className="text-sm flex-1">{topic}</span>
+                      <div className="flex items-center gap-2 ml-2">
+                        <button 
+                          onClick={() => updateCount(topic, false)}
+                          className="p-1 hover:bg-gray-200 rounded"
+                          disabled={!topicCounts[topic]}
+                        >
+                          <Minus className="h-4 w-4 text-gray-600" />
+                        </button>
+                        <span className="w-6 text-center">{topicCounts[topic] || 0}</span>
+                        <button 
+                          onClick={() => updateCount(topic, true)}
+                          className="p-1 hover:bg-gray-200 rounded"
+                        >
+                          <Plus className="h-4 w-4 text-gray-600" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
               </div>
             </aside>
 
