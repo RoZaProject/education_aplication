@@ -99,6 +99,15 @@ function HomePage() {
     </div>
   );
 }
+            {/* Right Sidebar (40%) */}
+            <aside className="md:w-2/5 order-1 md:order-2">
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-lg">Темы</h3>
+                  <span className="text-sm text-gray-600">Всего задач: {totalTasks}</span>
+                </div>
+              </div>
+            </aside>
 
 
 export default HomePage;
