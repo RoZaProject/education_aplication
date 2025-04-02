@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { LogIn, BookOpen, HelpCircle, Menu, Plus, Minus, Wand2, CheckCircle } from 'lucide-react';
 
 function HomePage() {
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [topicCounts, setTopicCounts] = useState({});
+  const [selectedTasks, setSelectedTasks] = useState([]);
 
   const topics = [
     "Анализ информационных моделей",
@@ -53,6 +57,20 @@ function HomePage() {
           </div>
         </div>
       </nav>
+      <div className="max-w-7xl mx-auto px-4 py-6">
+  <div className="flex flex-col md:flex-row gap-6">
+    {/* Main Content Area (60%) */}
+    <main className="md:w-3/5 order-2 md:order-1">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold mb-6">Вариант</h2>
+        
+        <div className="space-y-6">
+          {/* tasks list will go here */}
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
    </div>
   );
 }
