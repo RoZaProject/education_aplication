@@ -86,6 +86,11 @@ function HomePage() {
                   </div>
                 </div>
               ))}
+              {selectedTasks.length === 0 && (
+                  <div className="text-center text-gray-500 py-8">
+                    Выберите темы и количество задач справа, затем нажмите "Составить вариант" или "Сгенерировать вариант"
+                  </div>
+                )}
               </div>
             </div>
           </main>
