@@ -83,9 +83,27 @@ function LandingPage() {
                 }`}
                 />
             ))}
+                {/* Action Buttons */}
+        <div className="max-w-7xl mx-auto px-4 py-12">
+            <div className="flex flex-col md:flex-row gap-6">
+            <button 
+                className="flex-[3] bg-blue-600 text-white py-6 px-8 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-3 text-lg font-semibold shadow-lg"
+            >
+                <Newspaper className="h-6 w-6" />
+                <span>Статья: все, что нужно знать о ЕГЭ по информатике</span>
+            </button>
+            
+            <button 
+                className="flex-1 bg-purple-600 text-white py-6 px-8 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-3 text-lg font-semibold shadow-lg"
+            >
+                <Bot className="h-6 w-6" />
+                <span>Познакомиться с ИИ</span>
+            </button>
+            </div>
             </div>
         </div>
-      </div>
+    </div>
+</div>
   );
 }
 
