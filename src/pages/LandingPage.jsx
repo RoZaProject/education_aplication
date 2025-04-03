@@ -7,17 +7,17 @@ function LandingPage() {
 
   const slides = [
     {
-      image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=2940",
+      image: "котик_ноут.jpg",
       title: "Подготовка к ЕГЭ по информатике",
       description: "Эффективная подготовка с использованием искусственного интеллекта"
     },
     {
-      image: "https://images.unsplash.com/photo-1509475826633-fed577a2c71b?auto=format&fit=crop&q=80&w=2940",
+      image: "2_картинка.jpg",
       title: "Персонализированное обучение",
       description: "Адаптивная система подстраивается под ваш уровень знаний"
     },
     {
-      image: "https://images.unsplash.com/photo-1581472723648-909f4851d4ae?auto=format&fit=crop&q=80&w=2940",
+      image: "3_картинка.jpg",
       title: "Готовьтесь с уверенностью",
       description: "Регулярная практика и анализ ваших результатов"
     }
@@ -72,8 +72,20 @@ function LandingPage() {
             </div>
           </div>
         ))}
+            {/* Slider Controls */}
+            <div className="absolute bottom-4 left-0 right-0 z-30 flex justify-center gap-2">
+            {slides.map((_, index) => (
+                <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                    currentSlide === index ? 'bg-white scale-125' : 'bg-white/50'
+                }`}
+                />
+            ))}
+            </div>
+        </div>
       </div>
-    </div>
   );
 }
 
