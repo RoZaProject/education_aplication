@@ -52,7 +52,7 @@ function HomePage() {
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-2">
               <BookOpen className="h-6 w-6" />
-              <span className="font-bold text-xl"><Link to="/" style={{color: "white", textDecoration:'none'}}> Подготовка к ЕГЭ </Link></span>
+              <span className="font-bold text-xl"><Link to="/" style={{color: "white", textDecoration:'none'}}> RoZa </Link></span>
          
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
                

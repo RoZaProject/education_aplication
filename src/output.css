@@ -18,7 +18,6 @@
   /* 2 */
   border-color: #e5e7eb;
   /* 2 */
-  font-family: roboto;
 }
 
 ::before,
@@ -1074,7 +1073,7 @@ video {
 }
 
 *{
-  font-family: 'roboto';
+  font-family: roboto;
 }
 
 html, body, div, span, applet, object, iframe,
