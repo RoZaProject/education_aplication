@@ -6,9 +6,9 @@ from fastapi import FastAPI, Depends, Response
 from fastapi.responses import JSONResponse
 
 from DataBaseManager import db
-from DataBaseManager.models import Users, Groups
-from auntefication import SessionData, get_session_data, create_session_user, backend, cookie
-from models import UserAuth, UserLogin, CreateGroups
+from DataBaseManager.models import Users, Variants
+from authentication import SessionData, get_session_data, create_session_user, backend, cookie
+from models import UserAuth, UserLogin
 
 app = FastAPI()
 
