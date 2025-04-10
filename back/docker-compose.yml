@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    env_file:
+      - .env  # Используем те же переменные, что и для API
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-ege_platform}  # Имя БД (можно переопределить в .env)
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Сохраняем данные БД
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    env_file:
+      - .env
+    command: gunicorn main:app --bind 0.0.0.0:8000 --workers 4  # Продакшн-режим
+    # command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload  # Для разработки
+    depends_on:
+      db:
+        condition: service_healthy  # Ждём, пока БД не станет доступна
+    ports:
+      - "8000:8000"
+    restart: unless-stopped  # Более гибкая политика перезапуска
+
+volumes:
+  postgres_data:  # Том для хранения данных БД
