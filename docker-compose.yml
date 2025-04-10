@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    command: python main.py
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - ./back:/app
+      - /app/__pycache__
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+    tty: true
+
+networks:
+  default:
+    driver: bridge
