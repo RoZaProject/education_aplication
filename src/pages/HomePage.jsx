@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LogIn, BookOpen, HelpCircle, Menu, Plus, Minus, Wand2, CheckCircle } from 'lucide-react';
+import { Link } from "react-router-dom"
 
 function HomePage() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -51,13 +52,23 @@ function HomePage() {
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-2">
               <BookOpen className="h-6 w-6" />
-              <span className="font-bold text-xl">Подготовка к ЕГЭ</span>
+              <span className="font-bold text-xl"><Link to="/" style={{color: "white", textDecoration:'none'}}> Подготовка к ЕГЭ </Link></span>
+         
+              <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
+               
+                <Link to="/home" style={{color: "white", textDecoration:'none'}}>ПРОБНИК</Link>
+              </button>
+
+              <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
+            
+                <Link to="/result" style={{color: "white", textDecoration:'none'}}>РЕЗУЛЬТАТ</Link>
+              </button>
             </div>
             
             <div className="hidden md:flex items-center space-x-4">
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
                 <LogIn className="h-5 w-5" />
-                <span>Войти</span>
+                <Link to="/auth" style={{color: "white", textDecoration:'none'}}>Войти</Link>
               </button>
             </div>
             
@@ -70,7 +81,6 @@ function HomePage() {
           </div>
         </div>
       </nav>
-
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Main Content Area (60%) */}
