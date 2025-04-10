@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from "react-router-dom"
 
 function ResultsPage() {
+    const mockResults = Array.from({ length: 27 }, (_, index) => ({
+        id: index + 1,
+        correct: Math.random() > 0.5 // Random true/false for demonstration
+      }));
+      
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top Navigation Bar */}
