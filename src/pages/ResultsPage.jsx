@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import { Bot, BookPlus, Target } from 'lucide-react';
+import { LogIn, BookOpen, Menu, BookPlus, Target, Bot } from 'lucide-react';
+import { Link } from "react-router-dom"
 
 function ResultsPage() {
   const mockResults = Array.from({ length: 27 }, (_, index) => ({
@@ -31,14 +31,33 @@ function ResultsPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-2">
+              <BookOpen className="h-6 w-6" />
               <span className="font-bold text-xl"><Link to="/" style={{color: "white", textDecoration:'none'}}> Подготовка к ЕГЭ </Link></span>
+         
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
+               
                 <Link to="/home" style={{color: "white", textDecoration:'none'}}>ПРОБНИК</Link>
               </button>
+
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
+            
                 <Link to="/result" style={{color: "white", textDecoration:'none'}}>РЕЗУЛЬТАТ</Link>
               </button>
             </div>
+            
+            <div className="hidden md:flex items-center space-x-4">
+              <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
+                <LogIn className="h-5 w-5" />
+                <Link to="/auth" style={{color: "white", textDecoration:'none'}}>Войти</Link>
+              </button>
+            </div>
+            
+            <button 
+              className="md:hidden"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+            >
+              <Menu className="h-6 w-6" />
+            </button>
           </div>
         </div>
       </nav>
@@ -61,30 +80,32 @@ function ResultsPage() {
           </div>
         </div>
 
-        {/* AI Review */}
-        <div className="md:w-2/3">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Bot className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl font-semibold">Рецензия ИИ</h2>
-            </div>
-            <div className="whitespace-pre-wrap text-gray-700">
-              {mockAIReview}
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* AI Review */}
+          <div className="md:w-2/3">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Bot className="h-6 w-6 text-blue-600" />
+                <h2 className="text-xl font-semibold">Рецензия ИИ</h2>
+              </div>
+              <div className="whitespace-pre-wrap text-gray-700">
+                {mockAIReview}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Action Buttons */}
-        <div className="md:w-1/3 space-y-4">
-          <button className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-start text-left gap-3 text-base font-semibold shadow-md">
-            <BookPlus className="h-5 w-5 mt-0.5" />
-            <span>Составить новый вариант на основе итогов пробников</span>
-          </button>
+          {/* Action Buttons */}
+          <div className="md:w-1/3 space-y-4">
+            <button className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-start text-left gap-3 text-base font-semibold shadow-md">
+              <BookPlus className="h-5 w-5 mt-0.5" />
+              <span>Составить новый вариант на основе итогов пробников</span>
+            </button>
 
-          <button className="w-full bg-purple-600 text-white py-4 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-start text-left gap-3 text-base font-semibold shadow-md">
-            <Target className="h-5 w-5 mt-0.5" />
-            <span>Подборка заданий, в которых вы ошиблись, для отработки</span>
-          </button>
+            <button className="w-full bg-purple-600 text-white py-4 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-start text-left gap-3 text-base font-semibold shadow-md">
+              <Target className="h-5 w-5 mt-0.5" />
+              <span>Подборка заданий, в которых вы ошиблись, для отработки</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
