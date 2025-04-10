@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Bot } from 'lucide-react';
+import { Bot, BookPlus, Target } from 'lucide-react';
 
 function ResultsPage() {
   const mockResults = Array.from({ length: 27 }, (_, index) => ({
@@ -72,6 +72,19 @@ function ResultsPage() {
               {mockAIReview}
             </div>
           </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="md:w-1/3 space-y-4">
+          <button className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-start text-left gap-3 text-base font-semibold shadow-md">
+            <BookPlus className="h-5 w-5 mt-0.5" />
+            <span>Составить новый вариант на основе итогов пробников</span>
+          </button>
+
+          <button className="w-full bg-purple-600 text-white py-4 px-6 rounded-lg hover:bg-purple-700 transition-colors flex items-start text-left gap-3 text-base font-semibold shadow-md">
+            <Target className="h-5 w-5 mt-0.5" />
+            <span>Подборка заданий, в которых вы ошиблись, для отработки</span>
+          </button>
         </div>
       </div>
     </div>
