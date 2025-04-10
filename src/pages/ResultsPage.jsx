@@ -1,11 +1,28 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { Bot } from 'lucide-react';
 
 function ResultsPage() {
   const mockResults = Array.from({ length: 27 }, (_, index) => ({
     id: index + 1,
     correct: Math.random() > 0.5 // Random true/false for demonstration
   }));
+
+  const mockAIReview = `
+    На основе анализа вашего варианта, я вижу следующие моменты:
+
+    1. Сильные стороны:
+       - Отлично справляетесь с задачами на анализ алгоритмов
+       - Хорошо решаете задачи на системы счисления
+
+    2. Области для улучшения:
+       - Обратите внимание на задачи с базами данных
+       - Требуется практика в работе с логическими выражениями
+
+    3. Рекомендации:
+       - Уделите больше времени практике заданий типа 2 и 5
+       - Попробуйте решить дополнительные задачи на SQL запросы
+  `;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -41,6 +58,19 @@ function ResultsPage() {
                 {result.id}
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* AI Review */}
+        <div className="md:w-2/3">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Bot className="h-6 w-6 text-blue-600" />
+              <h2 className="text-xl font-semibold">Рецензия ИИ</h2>
+            </div>
+            <div className="whitespace-pre-wrap text-gray-700">
+              {mockAIReview}
+            </div>
           </div>
         </div>
       </div>
