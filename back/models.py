@@ -1,9 +1,13 @@
 from pydantic import BaseModel
+from datetime import date
 
 
 class UserAuth(BaseModel):
-    login: str
+    nickname: str
+    firstName: str
+    lastName: str
     password: str
+    birthday: date
 
 
 class UserLogin(BaseModel):

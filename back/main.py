@@ -1,5 +1,5 @@
 from uuid import UUID
-
+from fastapi.middleware.cors import CORSMiddleware
 import sqlalchemy
 import uvicorn
 from fastapi import FastAPI, Depends, Response
@@ -15,15 +15,14 @@ app = FastAPI()
 
 @app.post("/register", response_class=JSONResponse)
 async def registerUser(item: UserAuth):
-    if db.select(sqlalchemy.select(Users).where(Users.login == item.login)):
+    if db.select(sqlalchemy.select(Users).where(Users.firstName == item.firstName, Users.lastName == item.lastName)):
         return JSONResponse(content={"result": False, "msg": "A user with this login already exists"}, status_code=200)
-    elif not item.login or not item.password:
-        return JSONResponse(content={"result": False, "msg": "Login and password fields cannot be empty"},
-                            status_code=200)
+    elif not item.firstName or not item.lastName or not item.birthday or not item.password:
+        return JSONResponse(content={"result": False, "msg": "All fields must be filled in"}, status_code=200)
     response = JSONResponse(content={"result": True, "msg": "ok"}, status_code=200)
-    db.execute_commit(sqlalchemy.insert(Users).values(login=item.login, password=item.password))
-    user = db.select(sqlalchemy.select(Users).where(Users.login == item.login), db.any_)
-    await create_session_user(response, id=user.id, login=item.login)
+    db.execute_commit(sqlalchemy.insert(Users).values(firstName=item.firstName, lastName=item.lastName, birthday=item.birthday, password=item.password))
+    user = db.select(sqlalchemy.select(Users).where(Users.firstName == item.firstName, Users.lastName == item.lastName), db.any_)
+    await create_session_user(response, id=user.id, firstName=item.firstName, lastName=item.lastName)
     return response
 
 
@@ -54,6 +53,14 @@ async def del_session(response: Response, session_id: UUID = Depends(cookie)):
 async def index(session_data: SessionData = Depends(get_session_data)):
     # навешивание этих аргументов уже значит проверку
     return session_data.dict()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5173"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
