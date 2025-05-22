@@ -1,0 +1,9 @@
+.containerForm {
+  padding: 40px;
+  width: 500px;
+  margin: 0 auto;
+}
+.formBtn {
+  margin-top: 20px;
+  background-color: rgb(82, 82, 204)
+}
