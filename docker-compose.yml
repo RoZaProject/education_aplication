@@ -11,21 +11,36 @@ services:
     restart: always
     volumes:
       - ./back:/app
-      - /app/__pycache__
+      - /app/pycache
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   frontend:
     build:
       context: ./front
-      dockerfile: Dockerfile
+      dockerfile: education-mf-root/Dockerfile
     ports:
       - "5173:5173"
     volumes:
-      - ./front:/app
+      - ./front/education-mf-root:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
     stdin_open: true
     tty: true
+
+  postgres:
+    image: postgres:17.4
+    environment:
+      POSTGRES_DB: ${DBNAME}
+      POSTGRES_USER: ${DBUSER}
+      POSTGRES_PASSWORD: ${DBPASSWORD}
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+      - ./postgres/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
 networks:
   default:

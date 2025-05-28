@@ -1,59 +1,101 @@
-from uuid import UUID
-
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
+from models import UserAuth, UserLogin, Token
 import sqlalchemy
-import uvicorn
-from fastapi import FastAPI, Depends, Response
-from fastapi.responses import JSONResponse
-
 from DataBaseManager import db
-from DataBaseManager.models import Users, Variants
-from authentication import SessionData, get_session_data, create_session_user, backend, cookie
-from models import UserAuth, UserLogin
+from DataBaseManager.models import Users
+import os
+import uvicorn
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 app = FastAPI()
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        nickname: str = payload.get("sub")
+        if nickname is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    user = db.select(sqlalchemy.select(Users).where(Users.nickname == nickname), db.any_)
+    if user is None:
+        raise credentials_exception
+    return user
+
+@app.on_event("startup")
+async def startup():
+    db.init_db()
+
+@app.post("/register", response_model=Token)
+async def register(user: UserAuth):
+    if db.select(sqlalchemy.select(Users).where(Users.nickname == user.nickname), db.any_):
+        raise HTTPException(status_code=400, detail="Nickname already registered")
+    
+    hashed_password = get_password_hash(user.password)
+    
+    db.execute_commit(
+        sqlalchemy.insert(Users).values(
+            nickname=user.nickname,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            birthday=user.birthday,
+            password_hash=hashed_password 
+        )
+    )
+    
+    access_token = create_access_token(data={"sub": user.nickname})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/token", response_model=Token)
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    with db.get_session() as session:
+        user = session.query(Users).filter(Users.nickname == form_data.username).first()
+    
+    if not user or not verify_password(form_data.password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect nickname or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token = create_access_token(data={"sub": user.nickname})
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.post("/register", response_class=JSONResponse)
-async def registerUser(item: UserAuth):
-    if db.select(sqlalchemy.select(Users).where(Users.login == item.login)):
-        return JSONResponse(content={"result": False, "msg": "A user with this login already exists"}, status_code=200)
-    elif not item.login or not item.password:
-        return JSONResponse(content={"result": False, "msg": "Login and password fields cannot be empty"},
-                            status_code=200)
-    response = JSONResponse(content={"result": True, "msg": "ok"}, status_code=200)
-    db.execute_commit(sqlalchemy.insert(Users).values(login=item.login, password=item.password))
-    user = db.select(sqlalchemy.select(Users).where(Users.login == item.login), db.any_)
-    await create_session_user(response, id=user.id, login=item.login)
-    return response
-
-
-@app.post("/login", response_class=JSONResponse)
-async def authenticate(item: UserLogin):
-    if not item.login or not item.password:
-        return JSONResponse(content={"result": False, "msg": "Login and password fields cannot be empty"},
-                            status_code=200)
-    user = db.select(
-        sqlalchemy.select(Users).where(sqlalchemy.and_(Users.login == item.login, Users.password == item.password)),
-        db.any_)
-    if not user:
-        return JSONResponse(content={"result": False, "msg": "The login or password entered is incorrect"},
-                            status_code=200)
-    else:
-        response = JSONResponse(content={"result": True, "msg": "ok"}, status_code=200)
-        await create_session_user(response, id=user.id, login=item.login)
-    return response
-
-@app.post("/logout")
-async def del_session(response: Response, session_id: UUID = Depends(cookie)):
-    await backend.delete(session_id)
-    cookie.delete_from_response(response)
-    return "ok"
-
-
-@app.get("/", response_class=JSONResponse)
-async def index(session_data: SessionData = Depends(get_session_data)):
-    # навешивание этих аргументов уже значит проверку
-    return session_data.dict()
+@app.get("/users/me")
+async def read_users_me(current_user: Users = Depends(get_current_user)):
+    return {
+        "nickname": current_user.nickname,
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name
+    }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
