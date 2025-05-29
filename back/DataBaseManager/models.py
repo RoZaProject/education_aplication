@@ -1,56 +1,85 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, DateTime
-from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Text
+from sqlalchemy.orm import declarative_base, relationship, DeclarativeBase
+from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    def __repr__(self):
+        fields = ', '.join(f"{k}={getattr(self, k)!r}" for k in self.__mapper__.columns.keys())
+        return f"{self.__class__.__name__}({fields})"
 
-class Users(Base):
+    def __str__(self):
+        return self.__repr__()
+
+class Topic(Base):
+    __tablename__ = 'topics'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False, unique=True)
+
+    tasks = relationship("Task", back_populates="topic")
+
+
+class User(Base):
     __tablename__ = 'users'
-    
+
     id = Column(Integer, primary_key=True)
-    nickname = Column(String(50), unique=True, nullable=False)  
-    first_name = Column(String(100), nullable=False)           
+    nickname = Column(String(50), nullable=False, unique=True)
+    password_hash = Column(String(255), nullable=False)
+    first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    password_hash = Column(String(255), nullable=False)        
     birthday = Column(Date)
-    created_at = Column(DateTime, default=datetime.utcnow)    
-    
-    variants = relationship("Variants", back_populates="author")
-    results = relationship("Results", back_populates="user")
-
-class Variants(Base):
-    __tablename__ = 'variants'
-    
-    id = Column(Integer, primary_key=True)
-    title = Column(String(100), default="Мой вариант")
     created_at = Column(DateTime, default=datetime.utcnow)
-    author_id = Column(Integer, ForeignKey('users.id'))
-    
-    author = relationship("Users", back_populates="variants")
-    tasks = relationship("Tasks", back_populates="variant")
-    results = relationship("Results", back_populates="variant")
 
-class Tasks(Base):
+    variants = relationship("Variant", back_populates="user")
+    results = relationship("Result", back_populates="user")
+
+
+class Variant(Base):
+    __tablename__ = 'variants'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="variants")
+    results = relationship("Result", back_populates="variant")
+    variant_tasks = relationship("VariantTask", back_populates="variant")
+
+
+class Task(Base):
     __tablename__ = 'tasks'
-    
-    id = Column(Integer, primary_key=True)
-    content = Column(String, nullable=False)                  
-    answer = Column(String)                                   
-    points = Column(Integer, default=1)                      
-    variant_id = Column(Integer, ForeignKey('variants.id'))   
-    
-    variant = relationship("Variants", back_populates="tasks")
 
-class Results(Base):
-    __tablename__ = 'results'
-    
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))          
-    variant_id = Column(Integer, ForeignKey('variants.id'))   
-    score = Column(Integer)                                   
-    answers = Column(JSON)                                    
+    content = Column(String, nullable=False)
+    topic_id = Column(Integer, ForeignKey('topics.id'))
+    difficulty = Column(Integer, default=1)
+    points = Column(Integer, default=1)
+    #
+    topic = relationship("Topic", back_populates="tasks")
+    variant_tasks = relationship("VariantTask", back_populates="task")
+
+
+class VariantTask(Base):
+    __tablename__ = 'variant_tasks'
+
+    variant_id = Column(Integer, ForeignKey('variants.id'), primary_key=True)
+    task_id = Column(Integer, ForeignKey('tasks.id'), primary_key=True)
+
+    variant = relationship("Variant", back_populates="variant_tasks")
+    task = relationship("Task", back_populates="variant_tasks")
+
+
+class Result(Base):
+    __tablename__ = 'results'
+
+    id = Column(Integer, primary_key=True)
+    variant_id = Column(Integer, ForeignKey('variants.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    score = Column(Integer)
+    answers = Column(JSONB)
+    ai_review = Column(Text)
     completed_at = Column(DateTime, default=datetime.utcnow)
-    
-    user = relationship("Users", back_populates="results")
-    variant = relationship("Variants", back_populates="results")
+
+    user = relationship("User", back_populates="results")
+    variant = relationship("Variant", back_populates="results")

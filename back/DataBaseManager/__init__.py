@@ -12,7 +12,8 @@ class DataBaseManager:
         self.db_url = db_url or f'postgresql+psycopg2://{VarEnv.DBUSER}:{VarEnv.DBPASSWORD}@{VarEnv.DBHOST}/{VarEnv.DBNAME}'
         self.engine = create_engine(self.db_url, echo=True)
         self.Session = scoped_session(sessionmaker(bind=self.engine))
-        
+        Base.metadata.create_all(bind=self.engine)
+
     def init_db(self):
         Base.metadata.create_all(self.engine)
 
