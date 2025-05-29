@@ -1,36 +1,33 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-from pydantic import BaseModel
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
 from utils.variable_environment import VarEnv
-from DataBaseManager.models import Users, Variants
-
+from .models import Base
 
 class DataBaseManager:
     all_ = 0
     any_ = 1
+    
+    def __init__(self, db_url=None):
+        self.db_url = db_url or f'postgresql+psycopg2://{VarEnv.DBUSER}:{VarEnv.DBPASSWORD}@{VarEnv.DBHOST}/{VarEnv.DBNAME}'
+        self.engine = create_engine(self.db_url, echo=True)
+        self.Session = scoped_session(sessionmaker(bind=self.engine))
+        Base.metadata.create_all(bind=self.engine)
 
-    def __init__(self, db_url=f'postgresql+psycopg2://{VarEnv.DBUSER}:{VarEnv.DBPASSWORD}@{VarEnv.DBHOST}/{VarEnv.DBNAME}'):
-        """
-        Инициализация подключения к БД:
-        - db_url: строка подключения (например, 'sqlite:///mydatabase.db')
-        """
-
-        self.engine = create_engine(db_url, echo=True)
+    def init_db(self):
+        Base.metadata.create_all(self.engine)
 
     def execute_commit(self, command):
-        with self.engine.connect() as session:
+        with self.Session() as session:
             session.execute(command)
             session.commit()
-            session.close()
 
     def select(self, command, types=all_):
-        with self.engine.connect() as session:
-            if types == self.all_:
-                data = session.execute(command).fetchall()
-            else:
-                data = session.execute(command).fetchone()
-            session.close()
-            return data
+        with self.Session() as session:
+            result = session.execute(command)
+            return result.fetchall() if types == self.all_ else result.fetchone()
 
+    def get_session(self):
+        return self.Session()
 
 db = DataBaseManager()
