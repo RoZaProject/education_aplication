@@ -4,9 +4,9 @@ from gigachat import GigaChat
 from langchain_core.messages import HumanMessage
 from langchain_gigachat.chat_models import GigaChat
 
-from back.shems import Report
-from back.utils.util import match_tasks_with_answers, parse_submit_answer_list
-from back.utils.variable_environment import VarEnv
+from education_aplication.back.shems import Report
+from education_aplication.back.utils.util import match_tasks_with_answers, parse_submit_answer_list
+from education_aplication.back.utils.variable_environment import VarEnv
 
 
 class GPTService:

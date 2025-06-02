@@ -18,9 +18,10 @@ const AuthorisationPage = ({ mode = "register" }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const baseURL = "http://localhost:8000";
+
   const handleChangeFormInput = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Очищаем ошибку при изменении поля
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: "" });
     }
@@ -28,9 +29,11 @@ const AuthorisationPage = ({ mode = "register" }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
+    if (!formData.nick.trim()) newErrors.nick = "Введите никнейм";
+    if (!formData.password) newErrors.password = "Введите пароль";
+
     if (mode === "register") {
-      if (!formData.nick.trim()) newErrors.nick = "Введите никнейм";
       if (!formData.name.trim()) newErrors.name = "Введите имя";
       if (!formData.surname.trim()) newErrors.surname = "Введите фамилию";
       if (!formData.birthday) newErrors.birthday = "Введите дату рождения";
@@ -40,9 +43,6 @@ const AuthorisationPage = ({ mode = "register" }) => {
       if (formData.password !== formData.acceptPassword) {
         newErrors.acceptPassword = "Пароли не совпадают";
       }
-    } else {
-      if (!formData.nick.trim()) newErrors.nick = "Введите никнейм";
-      if (!formData.password) newErrors.password = "Введите пароль";
     }
 
     setErrors(newErrors);
@@ -57,31 +57,33 @@ const AuthorisationPage = ({ mode = "register" }) => {
     setApiError("");
 
     try {
-      const url = mode === "register" ? "/register" : "/token";
-      const payload = mode === "register" 
-        ? {
-            nickname: formData.nick,
-            first_name: formData.name,
-            last_name: formData.surname,
-            password: formData.password,
-            birthday: formData.birthday
-          }
-        : new URLSearchParams({
-            username: formData.nick,
-            password: formData.password,
-            grant_type: "password"
-          });
+      const url = mode === "register" ? `${baseURL}/register` : `${baseURL}/token`;
+      const payload =
+        mode === "register"
+          ? {
+              nickname: formData.nick,
+              first_name: formData.name,
+              last_name: formData.surname,
+              password: formData.password,
+              birthday: formData.birthday,
+            }
+          : new URLSearchParams({
+              username: formData.nick,
+              password: formData.password,
+              grant_type: "password",
+            });
 
       const response = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": mode === "register" 
-            ? "application/json" 
-            : "application/x-www-form-urlencoded"
+          "Content-Type":
+            mode === "register"
+              ? "application/json"
+              : "application/x-www-form-urlencoded",
         },
-        body: mode === "register" 
-          ? JSON.stringify(payload) 
-          : payload
+        body: mode === "register"
+          ? JSON.stringify(payload)
+          : payload,
       });
 
       const data = await response.json();
@@ -90,27 +92,22 @@ const AuthorisationPage = ({ mode = "register" }) => {
         throw new Error(data.detail || "Ошибка сервера");
       }
 
-      // Сохраняем токен при успешной авторизации
-      if (mode === "login") {
-        localStorage.setItem("token", data.access_token);
-        navigate("/"); // Перенаправляем на главную
-      } else {
-        // После регистрации автоматически авторизуем
-        const loginResponse = await fetch("/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: new URLSearchParams({
-            username: formData.nick,
-            password: formData.password,
-            grant_type: "password"
-          })
-        });
-        const loginData = await loginResponse.json();
-        localStorage.setItem("token", loginData.access_token);
-        navigate("/");
-      }
+      const token = mode === "login"
+        ? data.access_token
+        : (await (await fetch(`${baseURL}/token`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              username: formData.nick,
+              password: formData.password,
+              grant_type: "password",
+            }),
+          })).json()).access_token;
+
+      localStorage.setItem("token", token);
+      navigate("/");
     } catch (error) {
       setApiError(error.message || "Произошла ошибка");
     } finally {
@@ -226,7 +223,7 @@ const AuthorisationPage = ({ mode = "register" }) => {
             disabled={isLoading}
             className={`w-100 ${Styles.formBtn} ${mode === "register" ? "bg-success" : "bg-primary"}`}
           >
-            {isLoading ? "Загрузка..." : 
+            {isLoading ? "Загрузка..." :
               mode === "register" ? "Зарегистрироваться" : "Авторизоваться"}
           </Button>
 
