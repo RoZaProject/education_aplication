@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogIn, BookOpen, HelpCircle, Menu, Plus, Minus, Wand2, CheckCircle } from 'lucide-react';
+import { LogIn, BookOpen, HelpCircle, Menu, Plus, Minus, CheckCircle } from 'lucide-react';
 import { Link } from "react-router-dom"
 
 function HomePage() {
@@ -163,14 +163,14 @@ function HomePage() {
                   <BookOpen className="h-5 w-5" />
                   <span>Составить вариант ({totalTasks})</span>
                 </button>
-                <button 
+                {/* <button 
                   className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 flex items-center justify-center gap-2"
                   disabled={totalTasks === 0}
                   onClick={generateVariant}
                 >
                   <Wand2 className="h-5 w-5" />
                   <span>Сгенерировать вариант</span>
-                </button>
+                </button> */}
                 <button 
                   className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 flex items-center justify-center gap-2"
                   disabled={selectedTasks.length === 0}

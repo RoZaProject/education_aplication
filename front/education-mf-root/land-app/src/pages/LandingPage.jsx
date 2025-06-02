@@ -108,14 +108,7 @@ function LandingPage() {
             className="flex-[3] bg-blue-600 text-white py-6 px-8 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-3 text-lg font-semibold shadow-lg"
           >
             <Newspaper className="h-6 w-6" />
-            <a href='https://fipi.ru/ege'>Статья: все, что нужно знать о ЕГЭ по информатике</a>
-          </button>
-          
-          <button 
-            className="flex-1 bg-purple-600 text-white py-6 px-8 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-3 text-lg font-semibold shadow-lg"
-          >
-            <Bot className="h-6 w-6" />
-            <span>Познакомиться с ИИ</span> {/* тут будет ссылка на гитхаб репозиторий в котором будет рид ми файл ссылка будет выглядеть примерно так --->   <a href='https://fipi.ru/ege'>Статья: все, что нужно знать о ЕГЭ по информатике</a>*/}
+            <a href='https://fipi.ru/ege'>Все, что нужно знать о ЕГЭ по информатике</a>
           </button>
         </div>
       </div>

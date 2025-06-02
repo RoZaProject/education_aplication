@@ -1,9 +1,123 @@
-.containerForm {
-  padding: 40px;
-  width: 500px;
-  margin: 0 auto;
+/* Основные стили */
+.auth-container {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('https://i.ibb.co/Y4QgrKtw/2.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
-.formBtn {
+
+.container-override {
+  padding: 0;
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Текстовые элементы */
+.auth-title {
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 2.2rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.auth-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* Формы и поля ввода */
+.auth-form {
   margin-top: 20px;
-  background-color: rgb(82, 82, 204)
+}
+
+.auth-input {
+  border-radius: 8px;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 15px;
+  width: 100%;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.auth-input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Общие стили для ВСЕХ кнопок */
+.btn-custom {
+  background-color: #3498db !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+  transition: background-color 0.3s !important;
+}
+
+.btn-custom:hover {
+  background-color: #2980b9 !important;
+}
+
+/* Стили для табов */
+.auth-tabs .nav-link {
+  color: #495057;
+  font-weight: 500;
+  margin: 0 5px;
+}
+
+.auth-tabs .nav-link.active {
+  background-color: #3498db !important;
+  color: white !important;
+  border-radius: 8px !important;
+}
+
+/* Ссылки переключения (Нет аккаунта/Уже есть аккаунт) */
+.auth-switch {
+  margin-top: 20px;
+}
+
+.auth-switch-button {
+  color: #3498db !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.auth-switch-button:hover {
+  text-decoration: underline !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 20px;
+  }
+  
+  .auth-title {
+    font-size: 1.8rem;
+  }
+
+  .auth-tabs .nav-link {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }
