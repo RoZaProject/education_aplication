@@ -12,7 +12,8 @@ function App() {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
       <Routes>
-        <Route path="/auth" element={<AuthorisationPage />} />
+        <Route path="/auth" element={<AuthorisationPage mode="login" />} />
+        <Route path="/register" element={<AuthorisationPage mode="register" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/result" element={<ResultsPage />} />
         <Route path="/" element={<LandingPage />} />
