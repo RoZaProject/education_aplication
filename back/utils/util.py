@@ -4,15 +4,12 @@ from typing import List
 
 from pydantic import BaseModel
 
-from back.DataBaseManager.models import Task
-from back.shems import SubmitAnswer
+from education_aplication.back.DataBaseManager.models import Task
+from education_aplication.back.shems import SubmitAnswer
 
 
 def parse_submit_answer_list(data: str) -> List[SubmitAnswer]:
-
     return [SubmitAnswer(**item) for item in data]
-
-
 
 class AnsweredTask(BaseModel):
     task_id: int

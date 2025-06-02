@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import func, select
 
-from back.utils.gpt_service import GPTService
+from utils.gpt_service import GPTService
 from models import UserAuth, Token
 import sqlalchemy
 from DataBaseManager import db
@@ -16,7 +16,9 @@ from DataBaseManager.models import User, Task, Variant, VariantTask, Result
 import os
 import uvicorn
 
-from back.shems import SubmitAnswers
+from shems import SubmitAnswers
+
+from fastapi.middleware.cors import CORSMiddleware
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
@@ -319,6 +321,14 @@ async def read_users_askgpt(
     response = service.ask(task.content, ask)
 
     return {"response": response}
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 if __name__ == "__main__":
