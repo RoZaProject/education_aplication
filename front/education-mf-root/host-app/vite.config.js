@@ -22,6 +22,7 @@ export default defineConfig({
     cssCodeSplit: false,
   },
   dev: {
+    host: true,
     port: 3000, 
   }
 });

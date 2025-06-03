@@ -23,3 +23,6 @@ python-jose==3.3.0
 cryptography==3.4.0
 passlib
 python-multipart
+gigachat
+langchain_core
+langchain_gigachat

@@ -20,6 +20,7 @@ export default defineConfig({
     cssCodeSplit: false,
   },
   preview: {
+    host: true,
     port: 5175, 
   }
 });
