@@ -15,13 +15,45 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  frontend:
+  host_app:
     build:
-      context: ./front
-      dockerfile: education-mf-root/Dockerfile
+      context: ./front/education-mf-root/host-app
+      dockerfile: Dockerfile
     ports:
-      - "80:80"
-    restart: always
+      - "3000:80"
+    restart: unless-stopped
+
+  auth_app:
+    build:
+      context: ./front/education-mf-root/auth-app
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+
+  dashboard_app:
+    build:
+      context: ./front/education-mf-root/dashboard-app
+      dockerfile: Dockerfile
+    ports:
+      - "5174:80"
+    restart: unless-stopped
+
+  result_app:
+    build:
+      context: ./front/education-mf-root/result-app
+      dockerfile: Dockerfile
+    ports:
+      - "5175:80"
+    restart: unless-stopped
+
+  land_app:
+    build:
+      context: ./front/education-mf-root/land-app
+      dockerfile: Dockerfile
+    ports:
+      - "5176:80"
+    restart: unless-stopped
 
   postgres:
     image: postgres:17.4

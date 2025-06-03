@@ -7,6 +7,7 @@ const AuthorisationPage = React.lazy(() =>
 const HomePage = React.lazy(() => import("dashboard_app/HomePage"));
 const ResultsPage = React.lazy(() => import("result_app/ResultsPage"));
 const LandingPage = React.lazy(() => import("land_app/LandingPage"));
+console.log("🚦 [host_app] Current route:", location.pathname);
 
 function App() {
   return (

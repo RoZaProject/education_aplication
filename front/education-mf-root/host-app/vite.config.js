@@ -13,13 +13,36 @@ export default defineConfig({
         result_app: "http://localhost:5175/assets/remoteEntry.js",
         land_app: "http://localhost:5176/assets/remoteEntry.js",
       },
-      shared: ["react", "react-dom"], // 
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '^19.1.0'
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '^19.1.0'
+        },
+        'react-router-dom': {
+          singleton: true,
+          requiredVersion: '^7.6.0'
+        }
+      }, 
     }),
   ],
   build: {
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+  },
+  server: {
+    host: true,
+    port: 3000,
+    cors: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers": "*"
+    },
   },
   dev: {
     host: true,
