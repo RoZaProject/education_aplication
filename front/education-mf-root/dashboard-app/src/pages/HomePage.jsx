@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LogIn, BookOpen, HelpCircle, Menu, Plus, Minus, Wand2, CheckCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function HomePage() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -9,7 +9,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   const baseURL = "http://localhost:8000";
-  const topics = [ /* список как был */
+  const topics = [
     "Анализ информационных моделей",
     "Построение таблиц истинности логических выражений",
     "Поиск информации в реляционных базах данных",
@@ -44,9 +44,8 @@ function HomePage() {
   const generateVariant = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) return navigate("/login");
+      if (!token) return navigate("/register");
 
-      // 1. Получаем вариант
       const variantRes = await fetch(`${baseURL}/users/get_var`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -56,7 +55,6 @@ function HomePage() {
       const variantData = await variantRes.json();
       const variantId = variantData.variant_id;
 
-      // 2. Получаем задачи по варианту
       const tasksRes = await fetch(`${baseURL}/variants/${variantId}`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -78,18 +76,20 @@ function HomePage() {
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-2">
               <BookOpen className="h-6 w-6" />
-              <span className="font-bold text-xl"><a href="/" style={{color: "white", textDecoration:'none'}}> RoZa </a></span>
+              <span className="font-bold text-xl">
+                <Link to="/" style={{ color: "white", textDecoration: 'none' }}>RoZa</Link>
+              </span>
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
-                <a href="/home" style={{color: "white", textDecoration:'none'}}>ПРОБНИК</a>
+                <Link to="/home" style={{ color: "white", textDecoration: 'none' }}>ПРОБНИК</Link>
               </button>
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
-                <a href="/result" style={{color: "white", textDecoration:'none'}}>РЕЗУЛЬТАТ</a>
+                <Link to="/result" style={{ color: "white", textDecoration: 'none' }}>РЕЗУЛЬТАТ</Link>
               </button>
             </div>
             <div className="hidden md:flex items-center space-x-4">
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
                 <LogIn className="h-5 w-5" />
-                <a href="/auth" style={{color: "white", textDecoration:'none'}}>Войти</a>
+                <Link to="/auth" style={{ color: "white", textDecoration: 'none' }}>Войти</Link>
               </button>
             </div>
             <button className="md:hidden" onClick={() => setShowMobileMenu(!showMobileMenu)}>
@@ -102,7 +102,6 @@ function HomePage() {
       {/* Контент */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Основной блок */}
           <main className="md:w-3/5 order-2 md:order-1">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold mb-6">Вариант</h2>
@@ -137,7 +136,6 @@ function HomePage() {
             </div>
           </main>
 
-          {/* Боковая панель */}
           <aside className="md:w-2/5 order-1 md:order-2">
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex justify-between items-center mb-4">

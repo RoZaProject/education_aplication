@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { LogIn, BookOpen, Menu, Newspaper, Bot, ScrollText, Notebook  } from 'lucide-react';
-
+import { LogIn, BookOpen, Menu, Newspaper, Bot } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function LandingPage() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -24,7 +24,6 @@ function LandingPage() {
     }
   ];
 
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top Navigation Bar */}
@@ -33,27 +32,23 @@ function LandingPage() {
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-2">
               <BookOpen className="h-6 w-6" />
-              <span className="font-bold text-xl"><a href="/" style={{color: "white", textDecoration:'none'}}> RoZa </a></span>
-         
+              <span className="font-bold text-xl">
+                <Link to="/" style={{color: "white", textDecoration:'none'}}>RoZa</Link>
+              </span>
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
-               
-                <a href="/home" style={{color: "white", textDecoration:'none'}}>ПРОБНИК</a>
+                <Link to="/home" style={{color: "white", textDecoration:'none'}}>ПРОБНИК</Link>
               </button>
-
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
-            
-                <a href="/result" style={{color: "white", textDecoration:'none'}}>РЕЗУЛЬТАТ</a>
+                <Link to="/result" style={{color: "white", textDecoration:'none'}}>РЕЗУЛЬТАТ</Link>
               </button>
             </div>
-            
             <div className="hidden md:flex items-center space-x-4">
               <button className="hover:bg-blue-700 px-4 py-2 rounded-md flex items-center space-x-2">
                 <LogIn className="h-5 w-5" />
-                <a href="/auth" style={{color: "white", textDecoration:'none'}}>Войти</a>
+                <Link to="/auth" style={{color: "white", textDecoration:'none'}}>Войти</Link>
               </button>
             </div>
-            
-            <button 
+            <button
               className="md:hidden"
               onClick={() => setShowMobileMenu(!showMobileMenu)}
             >
@@ -86,7 +81,7 @@ function LandingPage() {
             </div>
           </div>
         ))}
-        
+
         {/* Slider Controls */}
         <div className="absolute bottom-4 left-0 right-0 z-30 flex justify-center gap-2">
           {slides.map((_, index) => (
@@ -104,18 +99,32 @@ function LandingPage() {
       {/* Action Buttons */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row gap-6">
-          <button 
+          <button
             className="flex-[3] bg-blue-600 text-white py-6 px-8 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-3 text-lg font-semibold shadow-lg"
           >
             <Newspaper className="h-6 w-6" />
-            <a href='https://fipi.ru/ege'>Статья: все, что нужно знать о ЕГЭ по информатике</a>
+            <a
+              href="https://fipi.ru/ege"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Статья: все, что нужно знать о ЕГЭ по информатике
+            </a>
           </button>
-          
-          <button 
+
+          <button
             className="flex-1 bg-purple-600 text-white py-6 px-8 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-3 text-lg font-semibold shadow-lg"
           >
             <Bot className="h-6 w-6" />
-            <span>Познакомиться с ИИ</span> {/* тут будет ссылка на гитхаб репозиторий в котором будет рид ми файл ссылка будет выглядеть примерно так --->   <a href='https://fipi.ru/ege'>Статья: все, что нужно знать о ЕГЭ по информатике</a>*/}
+            <a
+              href="https://github.com/your-repo"  // замените на реальный URL
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Познакомиться с ИИ
+            </a>
           </button>
         </div>
       </div>

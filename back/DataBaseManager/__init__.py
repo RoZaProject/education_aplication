@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
-from education_aplication.back.utils.variable_environment import VarEnv
+from utils.variable_environment import VarEnv
 from .models import Base
 
 class DataBaseManager:

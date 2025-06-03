@@ -4,8 +4,8 @@ from typing import List
 
 from pydantic import BaseModel
 
-from education_aplication.back.DataBaseManager.models import Task
-from education_aplication.back.shems import SubmitAnswer
+from DataBaseManager.models import Task
+from shems import SubmitAnswer
 
 
 def parse_submit_answer_list(data: str) -> List[SubmitAnswer]:

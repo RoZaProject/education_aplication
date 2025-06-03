@@ -231,14 +231,14 @@ const AuthorisationPage = ({ mode = "register" }) => {
             {mode === "register" ? (
               <span>
                 Уже есть аккаунт?{" "}
-                <Button variant="link" onClick={() => navigate("/login")}>
+                <Button variant="link" onClick={() => navigate("/home")}>
                   Войти
                 </Button>
               </span>
             ) : (
               <span>
                 Нет аккаунта?{" "}
-                <Button variant="link" onClick={() => navigate("/register")}>
+                <Button variant="link" onClick={() => navigate("/home")}>
                   Зарегистрироваться
                 </Button>
               </span>
