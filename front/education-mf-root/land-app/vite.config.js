@@ -11,7 +11,20 @@ export default defineConfig({
       exposes: {
         './LandingPage': './src/pages/LandingPage.jsx',
       },
-      shared: ['react', 'react-dom'] // ✅ ВАЖНО!
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '^19.1.0'
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '^19.1.0'
+        },
+        'react-router-dom': {
+          singleton: true,
+          requiredVersion: '^7.6.0'
+        }
+      }, 
     }),
   ],
   build: {
@@ -20,6 +33,16 @@ export default defineConfig({
     minify: false,
     cssCodeSplit: false,
   },
+  server: {
+    host: true,
+    port: 5176,
+    cors: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers": "*"
+    },
+  },   
   preview: {
     host: true,
     port: 5176, 

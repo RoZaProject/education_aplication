@@ -11,13 +11,36 @@ export default defineConfig({
       exposes: {
         "./ResultsPage": "./src/pages/ResultsPage.jsx",
       },
-      shared: ["react", "react-dom"],
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '^19.1.0'
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '^19.1.0'
+        },
+        'react-router-dom': {
+          singleton: true,
+          requiredVersion: '^7.6.0'
+        }
+      }, 
     }),
   ],
   build: {
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+  },
+  server: {
+    host: true,
+    port: 5175,
+    cors: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers": "*"
+    },
   },
   preview: {
     host: true,
