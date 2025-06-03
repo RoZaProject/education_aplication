@@ -11,7 +11,7 @@ export default defineConfig({
       exposes: {
         './AuthorisationPage': './src/pages/AuthorisationPage.jsx',
       },
-      shared: ['react', 'react-dom'] // ✅ ВАЖНО!
+      shared: ['react', 'react-dom'] 
     }),
   ],
   build: {
@@ -25,3 +25,4 @@ export default defineConfig({
     port: 5173, 
   }
 });
+
