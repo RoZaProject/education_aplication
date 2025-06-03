@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 /* Основные стили */
 .auth-container {
   background: 
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('https://i.ibb.co/Y4QgrKtw/2.jpg');
+    url('https://i.postimg.cc/JhKss05y/image.png');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -122,7 +121,6 @@
     font-size: 14px;
   }
 }
-=======
 .containerForm {
   padding: 40px;
   width: 500px;
@@ -132,4 +130,4 @@
   margin-top: 20px;
   background-color: rgb(82, 82, 204)
 }
->>>>>>> 0f2d6f7dd1b8d3d5ba4a20b807f764659aa7c5fe
+
