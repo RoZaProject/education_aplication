@@ -2,7 +2,7 @@ import gigachat
 import gigachat.context
 from gigachat import GigaChat
 from langchain_core.messages import HumanMessage
-from langchain_gigachat.chat_models import GigaChat
+from langchain_gigachat.chat_models import GigaChat as LangGigaChat
 
 from shems import Report
 from utils.util import match_tasks_with_answers, parse_submit_answer_list
@@ -16,7 +16,7 @@ class GPTService:
         }
         gigachat.context.session_id_cvar.set(headers.get("X-Session-ID"))
 
-        self.giga = GigaChat(
+        self.giga = LangGigaChat(
             credentials=VarEnv.GIGAGPT,
             verify_ssl_certs=False,
         )

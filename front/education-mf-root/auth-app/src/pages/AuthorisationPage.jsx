@@ -34,11 +34,11 @@ const AuthPage = () => {
     try {
       const response = await fetch(`${baseURL}/token`, {
         method: 'POST',
+        mode: 'cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           username: loginData.emailOrNick,
           password: loginData.password,
-          grant_type: 'password',
         }),
       });
 
@@ -46,7 +46,6 @@ const AuthPage = () => {
       if (!response.ok) throw new Error(data.detail || 'Ошибка авторизации');
 
       localStorage.setItem('token', data.access_token);
-      console.log('Авторизация успешна, токен сохранён');
       navigate('/home');
     } catch (err) {
       setApiError(err.message || 'Ошибка подключения');
@@ -63,8 +62,10 @@ const AuthPage = () => {
     }
 
     try {
-      const response = await fetch(`${baseURL}/register`, {
+      // 1) Регистрация
+      const resReg = await fetch(`${baseURL}/register`, {
         method: 'POST',
+        mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nickname: registerData.nick,
@@ -74,25 +75,23 @@ const AuthPage = () => {
           birthday: registerData.birthday,
         }),
       });
+      const regData = await resReg.json();
+      if (!resReg.ok) throw new Error(regData.detail || 'Ошибка регистрации');
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.detail || 'Ошибка регистрации');
-
-      const loginResponse = await fetch(`${baseURL}/token`, {
+      // 2) Авто-логин после успешной регистрации
+      const resLogin = await fetch(`${baseURL}/token`, {
         method: 'POST',
+        mode: 'cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           username: registerData.nick,
           password: registerData.password,
-          grant_type: 'password',
         }),
       });
+      const loginResp = await resLogin.json();
+      if (!resLogin.ok) throw new Error(loginResp.detail || 'Ошибка входа после регистрации');
 
-      const loginData = await loginResponse.json();
-      if (!loginResponse.ok) throw new Error(loginData.detail || 'Ошибка входа после регистрации');
-
-      localStorage.setItem('token', loginData.access_token);
-      console.log('Регистрация и вход успешны');
+      localStorage.setItem('token', loginResp.access_token);
       navigate('/home');
     } catch (err) {
       setApiError(err.message || 'Ошибка подключения');
@@ -119,7 +118,7 @@ const AuthPage = () => {
               className={`mb-4 ${styles['auth-tabs']}`}
               variant="pills"
             >
-              <Tab eventKey="login" title="Вход" className="border-0">
+              <Tab eventKey="login" title="Вход">
                 <Form onSubmit={handleLoginSubmit} className={styles['auth-form']}>
                   <Form.Group className="mb-3">
                     <Form.Label>Email или никнейм</Form.Label>
@@ -132,7 +131,6 @@ const AuthPage = () => {
                       className={styles['auth-input']}
                     />
                   </Form.Group>
-
                   <Form.Group className="mb-4">
                     <Form.Label>Пароль</Form.Label>
                     <Form.Control
@@ -144,14 +142,13 @@ const AuthPage = () => {
                       className={styles['auth-input']}
                     />
                   </Form.Group>
-
                   <Button variant="primary" type="submit" className={`w-100 ${styles['btn-custom']}`}>
                     Войти
                   </Button>
                 </Form>
               </Tab>
 
-              <Tab eventKey="register" title="Регистрация" className="border-0">
+              <Tab eventKey="register" title="Регистрация">
                 <Form onSubmit={handleRegisterSubmit} className={styles['auth-form']}>
                   <div className="row">
                     <div className="col-md-6">
@@ -215,7 +212,6 @@ const AuthPage = () => {
                       className={styles['auth-input']}
                     />
                   </Form.Group>
-
                   <Form.Group className="mb-4">
                     <Form.Label>Подтвердите пароль</Form.Label>
                     <Form.Control
@@ -239,14 +235,14 @@ const AuthPage = () => {
               {activeTab === 'login' ? (
                 <p className="text-muted">
                   Нет аккаунта?{' '}
-                  <Button variant="link" onClick={() => setActiveTab('register')} className={styles['auth-switch-button']}>
+                  <Button variant="link" onClick={() => setActiveTab('register')}>
                     Создайте новый
                   </Button>
                 </p>
               ) : (
                 <p className="text-muted">
                   Уже есть аккаунт?{' '}
-                  <Button variant="link" onClick={() => setActiveTab('login')} className={styles['auth-switch-button']}>
+                  <Button variant="link" onClick={() => setActiveTab('login')}>
                     Войти
                   </Button>
                 </p>

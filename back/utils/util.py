@@ -16,7 +16,6 @@ class AnsweredTask(BaseModel):
     content: str
     answer: str
 
-
 def match_tasks_with_answers(
         tasks: List[Task],
         answers: List[SubmitAnswer]
